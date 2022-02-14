@@ -1,0 +1,208 @@
+<?php
+
+use Egulias\EmailValidator\Validation\Exception\EmptyValidationList;
+
+/**
+ * Please fix the items marked with "@TODO" in this class
+ * 
+ * Follow the https://www.php-fig.org/psr/psr-2/ coding style guide.
+ * 
+ * One exception to PSR-2: opening braces MUST always be on the same line 
+ * for classes, methods, functions, and control structures
+ */
+class Singleton{
+
+    // @TODO Implement Singleton functionality
+
+    private static $instance = null;
+    private $conn;
+
+    private $host = 'localhost';
+    private $userName = 'db-user-name';
+    private $password = 'db-password';
+    private $datbase_name = 'db-name';
+
+    // The db connection is established in the private constructor.
+    private function __construct(){
+        $this->conn = new PDO(
+            "mysql:host={$this->host};
+                        dbname={$this->datbase_name}",
+                                $this->userName,
+                                $this->password,
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")
+        );
+    }
+    public static function getInstance(): self{
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+     /**
+     * get Database Connection 
+     * 
+     * @param string 
+     */
+    public function getConnection(){
+      return $this->conn;
+    }
+
+
+    /**
+     * Display user name
+     * 
+     * @param string $name User-provided name
+     */
+    public function userEcho($name){
+        // @TODO Validate & sanitize $name
+        if($this->validateAndSanitizInput($name, $santize_function_as_input)){
+            echo "The value of 'name' is {$filter_name}'";
+        }
+    }
+
+     /**
+     * Validating and Sanitizing the input
+     * 
+     * @param string $value
+     */
+    public function validateAndSanitizeInput($name,$santize_function_as_input){
+        if(isset ($name) ){
+           return filter_var($name,  $santize_function_as_input); 
+        }
+    }
+
+    /**
+     * Query by user name
+     * 
+     * @param string $name User-provided name
+     */
+    public function userQuery($name){
+        // @TODO Validate & sanitize $name
+        if(validateAndSanitizeInput($name, $santize_function_as_input)){
+            return mysql_query("SELECT * FROM `test` WHERE `name` = '{$name}' LIMIT 1",$this->getConnection());
+        }
+    }
+
+    /**
+     * Output the contents of a file
+     * 
+     * @param string $path User-provided file path
+     */
+    public function userFile($path){
+        // @TODO Validate & sanitize $path
+        if(validateAndSanitizeInput($path, $santize_function_as_input)){
+            readfile($path);
+        }
+        
+    }
+
+    /**
+     * Nested conditions
+     */
+    public function nestedConditions(){
+        // @TODO Untangle nested conditions
+        // if ($conditionA) {
+        //     if ($conditionB) {
+        //         if ($conditionC) {
+        //             echo 'ABC';
+        //         } else {
+        //             echo '^C';
+        //         }
+        //     } else {
+        //         echo '^B';
+        //     }
+        // } else {
+        //     echo '^A';
+        // }
+        $value = ($conditionA && $conditionB && $conditionC ) ? "ABC" : (($conditionC)  ? "^C" : (($conditionB))  ? "^B"  : "^A");
+        echo $value;
+    }
+
+    /**
+     * Return statements
+     * 
+     * @return boolean
+     */
+    public function returnStatements(){
+        // @TODO Fix
+        // if ($conditionA) {
+        //     echo 'A';
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+        return ($conditionA) ? "A" : false;
+    }
+
+    /**
+     * Null coalescing
+     */
+    public function nullCoalescing(){
+        // @TODO Simplify
+        // if (isset($_GET['name'])) {
+        //     $name = $_GET['name'];
+        // } elseif (isset($_POST['name'])) {
+        //     $name = $_POST['name'];
+        // } else {
+        //     $name = 'nobody';
+        // }
+        // return $name;
+
+        $value = $_GET['name'] ?? $_POST['username'] ?? 'no body';
+        echo ($value);
+    }
+
+    /**
+     * Method chaining
+     */
+    public function methodChained(){
+        // @TODO Implement method chaining
+        $employess = DB::table('employees')
+        ->select('name','position')
+        ->where('position','software developer')
+        ->where('age' > 20)
+        ->orderBy('orderBy');
+    }
+
+    /**
+     * Immutables are hard to find
+     */
+    public function checkValue($value)
+    {
+        $result = null;
+
+        // @TODO Make all the immutable values (int, string) in this class 
+        // easily replaceable
+        switch ($value) {
+            case 'stringA':
+                $result = 1;
+                break;
+
+            case 'stringB':
+                $result = 2;
+                break;
+        }
+
+        return $result;
+
+        // did't unnderstand the quetion at all
+    }
+
+    /**
+     * Check a string is a 24 hour time
+     * 
+     * @example "00:00:00", "23:59:59", "20:15"
+     * @return boolean
+     */
+    public function regexTest($time24Hour): string
+    {
+        // @TODO Implement RegEx and return type; validate & sanitize input
+        if($time24Hour){
+        return preg_match('#^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$#', $time24Hour);
+        }
+    }
+}
+
+/*EOF*/
